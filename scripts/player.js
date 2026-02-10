@@ -3,7 +3,7 @@ const player = document.getElementById("player");
 const files = [
   "audio/Spiritual_Healing.mp3",
   "audio/The_Philosopher.mp3",
-  "audio/u1,000_Eyes",
+  "audio/u1000_Eyes.mp3",
 ];
 const riffs = [210, 76, 92];
 

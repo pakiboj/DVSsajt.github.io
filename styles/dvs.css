@@ -36,7 +36,7 @@ button {
     transition: all 0.3s ease;
 }
 button#riff {
-    padding: 50px 280px;
+    padding: 50px 260px;
     font-size: 16px;
     cursor: pointer;
     border: 2px solid #333;
