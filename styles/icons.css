@@ -1,0 +1,40 @@
+.icon {
+  width: 200px;
+  height: 100px;
+
+  padding: 10px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+/* Individual icons */
+#play {
+  background-image: url("../img/icons/play.png");
+}
+
+#pause {
+  background-image: url("../img/icons/pause.png");
+  
+}
+
+#next {
+  background-image: url("../img/icons/forward-button.png");
+}
+
+#riff {
+    background-image: url("../img/icons/fire.png");
+
+}
+
+#playpause{
+    background-image: url("../img/icons/pause-play.png");
+}
+
+/* Optional hover effect */
+.icon:hover {
+  opacity: 0.8;
+}

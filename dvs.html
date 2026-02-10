@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DVS sajt za izradu projekta</title>
+</head>
+
+<link rel="stylesheet" type="text/css" href="styles/dvs.css" />
+<link rel="stylesheet" type="text/css" href="styles/icons.css" />
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<body >
+
+    <h1>Na predlog profesora 
+        izradjen je ovaj sajt <br> kako bi pratio 
+        napredak izrade projekta iz predmeta <br>
+        <u>Digitalni VLSI sistemi</u>
+    </h1>
+    <h2> </h2>
+    <div class="linkovi">
+        <!-- <a href="../index.html">Povratak na prvu stranicu</a> </div>-->
+
+    
+    <div id="header"> Download link projekta(neaktivan trenutno) </div>
+    <div style="text-align: left;" id="content"> Izrada projekta 
+        <h2 style="text-align: left;"> 09. feb 2026. </h2>
+        <p class="project-text">
+
+
+            Danas smo počeli izradu projekta. Konačno smo odradili LAB2 jer sko zaključili da nam je to pola posla. Dobar deo projekta 
+            se svodi na LAB2. <br>
+            Zajedno smo prosli svih 24 strane, doduše zbrzali smo deo sa primerima za filtere jer sko skontali da 
+            je taj korak daleko od nas. <br> <br>
+
+            Imali smo problema sa ILA-om ponovo. <br>
+            Dodavanjem nje u VHDL kood, preko mark-debug komandi, dobili smo debug_cores xsa fajl <br>
+            ALI <br>
+            Kad probamo da dodamo u Hardware manager, alat nam izbacuje grešku da nije uspeo da nadje debug cores. 
+            U nastavku prilažem sliku na uvid kao dokaz. Verujem da je ILA jako bitan deo izrade VLSI sistema i voleo bih da naučimo da je koristimo
+            što pre. <br>
+
+            <img src="img/1.png" width="40%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <img src="img/2.png" width="40%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+
+            <br>
+            U narednim danima počećemo sa izradom akceleratora, prvo osnovne potrebe a onda i bonuse.
+
+
+
+        </p>
+
+        <h2 style="text-align: left;"> 10. feb 2026. </h2>
+        <p class="project-text">
+
+            Danas smo se najviše pozabavili preliminarnom verzijom blok dizajna. Dodali smo Timer i ovako bi otprilike
+            trebalo da izgleda naš finalni projekat, samo umesto acc_neg_image treba da stoji acc_image filter.
+
+            <img src="img/3.1.png" width="100%" height="90%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <br>
+
+            Axi_timer smo ostavili skroz bez interrupta jer smo zaključili da nam nije potreban jer ne odlučuje Timer kada treba da 
+            izračina vreme.
+            <br>
+            Potom zmo započeli izradu našeg akumulatora odnosno komponente acc_image_filter. Ovo je neka naša zamisao po tekstu zadatka. <br>
+
+            <img src="img/acc_filter_image.png" width="40%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <br>
+            
+            U okviru njega, ralizovaćemo kao posebne komponente BRAM i aritmetičku jedinicu pa ćemo ih posle kao komponente dodati
+            u naš filter. <br>
+
+            <img src="img/4.1.png" width="40%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <img src="img/5.1.png" width="40%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <br>
+
+            Ispod ću priložiti kodove za obe komponente. Bram je kompletiran, razlikuje se malo sa slike, odnosno razdvojili smo 
+            data_out na data_out_1 i data_out_2.<br>
+            Komponenta acc_image_filter za sad ostaje nekompletirana.<br>
+
+            <a href="text/BRAM.txt" target = "_blank"> BRAM</a><br>
+            <a href="text/acc_image_filter.txt" target = "_blank"> acc_image_filter</a><br>
+
+        </p>
+    </div>
+    <div style="text-align: left;" id="reklame"> Kutak za muziku
+        <br>
+        <br>
+        <audio id="player" controls></audio> <br>
+        <script src="scripts/player.js"></script>
+
+        <button id="playpause" class="icon" onclick="playPauseAudio()"></button>
+
+        <button id="next" class="icon" onclick="Next()"></button> <br>
+
+        <h2 id="riff"> KLIKNI NA DUGME I</h2>
+        <h2 id="riff"> PRESKOČI NA MNOGO DOBAR RIFF</h2>
+        <button id="riff" class="icon" onclick="Riff()"></button>
+    </div>
+
+
+
+    <div style="text-align: left; background-color: rgba(184, 167, 167, 0.6);" id="Messagebox"> Ostavite nam poruku
+        <form id="contact-form">
+        <input
+            type="text"
+            name="name"
+            placeholder="Vaše ime"
+            required
+            style="padding: 10px 50px;"
+        />
+
+        <br>
+
+        <textarea
+            name="message"
+            placeholder="Poruka"
+            rows="10"
+            cols="30"
+            required
+            style="padding: 50px 180px;"
+            
+        ></textarea>
+
+        <br><br>
+
+        <button type="submit">Send</button>
+        </form>
+
+        <script>
+        // Initialize EmailJS with your public key
+        (function() {
+            emailjs.init({
+                publicKey: "oz1vCSXNWIjjO-kOM"
+            });
+        })();
+
+        // Wait for DOM to load
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("contact-form");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                // Send email using EmailJS
+                emailjs.sendForm(
+                    "service_av6muak",    // Your service ID
+                    "template_6k56kfe",   // Your template ID
+                    this                  // The form element
+                )
+                .then(() => {
+                    alert("Message sent successfully!");
+                    form.reset();
+                })
+                .catch((error) => {
+                    console.error("EmailJS Error:", error);
+                    alert("Failed to send message. Error: " + error.text);
+                });
+            });
+        });
+        </script>
+    </div>
+
+
+
+
+
+
+
+    <!-- FOOTER -->
+<footer class="footer">
+    <p><b>Studenti:</b><br>
+    Mihajlo Pavlović 21/0343<br>
+    Jovan Jeremić 16/0554</p>
+
+    <p><b>Profesori:</b><br>
+    doc. dr Jelena Popović-Božović (jelena@etf.bg.ac.rs)<br>
+    doc. dr Dragomir El Mezeni (elmezeni@etf.bg.ac.rs)</p>
+</footer>
+
+</body>
+</html>
