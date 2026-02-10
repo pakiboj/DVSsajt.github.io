@@ -5,7 +5,7 @@ const files = [
   "audio/The_Philosopher.mp3",
   "audio/u1000_Eyes.mp3",
 ];
-const riffs = [210, 76, 92];
+const riffs = [210, 76, 87];
 
 player.src = files[i];
 
