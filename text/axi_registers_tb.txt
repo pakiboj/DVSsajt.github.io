@@ -1,0 +1,233 @@
+----------------------------------------------------------------------------------
+-- Testbench for axi_registers module
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+use work.axi_register_pkg.all;
+
+entity tb_axi_registers is
+end tb_axi_registers;
+
+architecture Behavioral of tb_axi_registers is
+    
+    constant CLK_PERIOD : time := 10 ns;
+    constant G_S_AXI_LITE_ADDR_WIDTH : integer := 9;
+    constant G_S_AXI_LITE_DATA_WIDTH : integer := 32;
+    
+    -- Clock and reset
+    signal clk     : std_logic := '0';
+    signal reset   : std_logic := '0';
+    signal cfg_en  : std_logic := '0';
+    
+    -- AXI Write Address Channel
+    signal s_axi_lite_awaddr  : std_logic_vector(G_S_AXI_LITE_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal s_axi_lite_awprot  : std_logic_vector(2 downto 0) := (others => '0');
+    signal s_axi_lite_awvalid : std_logic := '0';
+    signal s_axi_lite_awready : std_logic;
+    
+    -- AXI Write Data Channel
+    signal s_axi_lite_wdata   : std_logic_vector(G_S_AXI_LITE_DATA_WIDTH-1 downto 0) := (others => '0');
+    signal s_axi_lite_wstrb   : std_logic_vector(3 downto 0) := (others => '1');
+    signal s_axi_lite_wvalid  : std_logic := '0';
+    signal s_axi_lite_wready  : std_logic;
+    
+    -- AXI Write Response Channel
+    signal s_axi_lite_bresp   : std_logic_vector(1 downto 0);
+    signal s_axi_lite_bvalid  : std_logic;
+    signal s_axi_lite_bready  : std_logic := '1';
+    
+    -- AXI Read Address Channel
+    signal s_axi_lite_araddr  : std_logic_vector(G_S_AXI_LITE_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal s_axi_lite_arprot  : std_logic_vector(2 downto 0) := (others => '0');
+    signal s_axi_lite_arvalid : std_logic := '0';
+    signal s_axi_lite_arready : std_logic;
+    
+    -- AXI Read Data Channel
+    signal s_axi_lite_rdata   : std_logic_vector(G_S_AXI_LITE_DATA_WIDTH-1 downto 0);
+    signal s_axi_lite_rvalid  : std_logic;
+    signal s_axi_lite_rready  : std_logic := '1';
+    signal s_axi_lite_rresp   : std_logic_vector(1 downto 0);
+
+    -- DUT outputs
+    signal boder_value : std_logic_vector(7 downto 0);
+    signal bord        : std_logic_vector(1 downto 0);
+    signal bypass      : std_logic;
+    signal mode        : std_logic;
+    signal radius      : std_logic_vector(2 downto 0);
+    signal img_width   : std_logic_vector(15 downto 0);
+    signal img_height  : std_logic_vector(15 downto 0);
+    signal coeff_scale : std_logic_vector(15 downto 0);
+    signal coeff       : t_coeff_array;
+
+begin
+
+    -- DUT instantiation
+    dut: entity work.axi_registers
+        generic map (
+            G_S_AXI_LITE_ADDR_WIDTH => G_S_AXI_LITE_ADDR_WIDTH,
+            G_S_AXI_LITE_DATA_WIDTH => G_S_AXI_LITE_DATA_WIDTH
+        )
+        port map (
+            clk => clk,
+            reset => reset,
+            cfg_en => cfg_en,
+            
+            s_axi_lite_awaddr  => s_axi_lite_awaddr,
+            s_axi_lite_awprot  => s_axi_lite_awprot,
+            s_axi_lite_awvalid => s_axi_lite_awvalid,
+            s_axi_lite_awready => s_axi_lite_awready,
+            
+            s_axi_lite_wdata  => s_axi_lite_wdata,
+            s_axi_lite_wstrb  => s_axi_lite_wstrb,
+            s_axi_lite_wvalid => s_axi_lite_wvalid,
+            s_axi_lite_wready => s_axi_lite_wready,
+            
+            s_axi_lite_bresp  => s_axi_lite_bresp,
+            s_axi_lite_bvalid => s_axi_lite_bvalid,
+            s_axi_lite_bready => s_axi_lite_bready,
+            
+            s_axi_lite_araddr  => s_axi_lite_araddr,
+            s_axi_lite_arprot  => s_axi_lite_arprot,
+            s_axi_lite_arvalid => s_axi_lite_arvalid,
+            s_axi_lite_arready => s_axi_lite_arready,
+            
+            s_axi_lite_rdata  => s_axi_lite_rdata,
+            s_axi_lite_rvalid => s_axi_lite_rvalid,
+            s_axi_lite_rready => s_axi_lite_rready,
+            s_axi_lite_rresp  => s_axi_lite_rresp,
+            
+            boder_value => boder_value,
+            bord => bord,
+            bypass => bypass,
+            mode => mode,
+            radius => radius,
+            img_width => img_width,
+            img_height => img_height,
+            coeff_scale => coeff_scale,
+            coeff => coeff
+        );
+
+    -- Clock generation
+    clk_process : process
+    begin
+        clk <= '0';
+        wait for CLK_PERIOD/2;
+        clk <= '1';
+        wait for CLK_PERIOD/2;
+    end process;
+
+    -- Stimulus
+    stim : process
+    begin
+        -- Reset
+        reset <= '1';
+        wait for 100 ns;
+        reset <= '0';
+        wait for 50 ns;
+
+        -- Write to CTRL register (address 0x00)
+        wait until rising_edge(clk);
+        s_axi_lite_awaddr  <= "000000000";  -- 0x00
+        s_axi_lite_awvalid <= '1';
+        s_axi_lite_wdata   <= x"00000F5A";
+        s_axi_lite_wvalid  <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_awvalid <= '0';
+        s_axi_lite_wvalid  <= '0';
+        wait for 50 ns;
+
+        -- Write to RADIUS register (address 0x04)
+        wait until rising_edge(clk);
+        s_axi_lite_awaddr  <= "000000100";  -- 0x04
+        s_axi_lite_awvalid <= '1';
+        s_axi_lite_wdata   <= x"00000003";
+        s_axi_lite_wvalid  <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_awvalid <= '0';
+        s_axi_lite_wvalid  <= '0';
+        wait for 50 ns;
+
+        -- Write to COEFF_SCALE register (address 0x08)
+        wait until rising_edge(clk);
+        s_axi_lite_awaddr  <= "000001000";  -- 0x08
+        s_axi_lite_awvalid <= '1';
+        s_axi_lite_wdata   <= x"00001234";
+        s_axi_lite_wvalid  <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_awvalid <= '0';
+        s_axi_lite_wvalid  <= '0';
+        wait for 50 ns;
+
+        -- Write to IMG_WIDTH register (address 0x0C)
+        wait until rising_edge(clk);
+        s_axi_lite_awaddr  <= "000001100";  -- 0x0C
+        s_axi_lite_awvalid <= '1';
+        s_axi_lite_wdata   <= x"00000280";
+        s_axi_lite_wvalid  <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_awvalid <= '0';
+        s_axi_lite_wvalid  <= '0';
+        wait for 50 ns;
+
+        -- Write to IMG_HEIGHT register (address 0x10)
+        wait until rising_edge(clk);
+        s_axi_lite_awaddr  <= "000010000";  -- 0x10
+        s_axi_lite_awvalid <= '1';
+        s_axi_lite_wdata   <= x"000001E0";
+        s_axi_lite_wvalid  <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_awvalid <= '0';
+        s_axi_lite_wvalid  <= '0';
+        wait for 50 ns;
+
+        -- Write to COEFF_0 (address 0x40)
+        wait until rising_edge(clk);
+        s_axi_lite_awaddr  <= "001000000";  -- 0x40
+        s_axi_lite_awvalid <= '1';
+        s_axi_lite_wdata   <= x"00001111";
+        s_axi_lite_wvalid  <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_awvalid <= '0';
+        s_axi_lite_wvalid  <= '0';
+        wait for 50 ns;
+
+        -- Write to COEFF_1 (address 0x44)
+        wait until rising_edge(clk);
+        s_axi_lite_awaddr  <= "001000100";  -- 0x44
+        s_axi_lite_awvalid <= '1';
+        s_axi_lite_wdata   <= x"00002222";
+        s_axi_lite_wvalid  <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_awvalid <= '0';
+        s_axi_lite_wvalid  <= '0';
+        wait for 50 ns;
+
+        -- Read from CTRL register (address 0x00)
+        wait until rising_edge(clk);
+        s_axi_lite_araddr  <= "000000000";  -- 0x00
+        s_axi_lite_arvalid <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_arvalid <= '0';
+        wait for 100 ns;
+
+        -- Read from COEFF_0 (address 0x40)
+        wait until rising_edge(clk);
+        s_axi_lite_araddr  <= "001000000";  -- 0x40
+        s_axi_lite_arvalid <= '1';
+        wait until rising_edge(clk);
+        s_axi_lite_arvalid <= '0';
+        wait for 100 ns;
+
+        -- Enable cfg_en to lock registers
+        wait until rising_edge(clk);
+        cfg_en <= '1';
+        wait for 20 ns;
+        cfg_en <= '0';
+        wait for 100 ns;
+
+        report "Simulation finished";
+        wait;
+    end process;
+
+end Behavioral;

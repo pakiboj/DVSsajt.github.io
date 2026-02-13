@@ -28,7 +28,7 @@
         <h2 style="text-align: left;"> 09. feb 2026. </h2>
         <p class="project-text">
 
-
+                
             Danas smo počeli izradu projekta. Konačno smo odradili LAB2 jer sko zaključili da nam je to pola posla. Dobar deo projekta 
             se svodi na LAB2. <br>
             Zajedno smo prosli svih 24 strane, doduše zbrzali smo deo sa primerima za filtere jer sko skontali da 
@@ -83,7 +83,38 @@
             <a href="text/acc_image_filter.txt" target = "_blank"> acc_image_filter</a><br>
 
         </p>
+
+        <h2 style="text-align: left;"> 13. feb 2026. </h2>
+        <p class="project-text">
+
+            Danas smo odradili dosta VHDL-a, promenili malo strukturu i arhitekturu. Dodali smo enable signal na BRAM. Napredak je veliki i trebalo nam je dosta vremena 
+            da ukopimo sve ali uspeli smo. Verujem da je ovo danas najteži deo jer ako bude bude bilo teže ne znam dal ću izdržati psihički. 
+            Posle duže razmišljanja i mozganja shvatili smo da treba da koristimo AXI Lite modul interfejs tako da smo orijentisali ideju oko toga. Realizovali
+            smo axi_registers komponentu koja će biti jedna od podkomponenti zajedno sa BRAM-om, aritmetičkom jedinicom i možda komponentom za proširivanje slike.
+            Dole prilažem sliku za primer. Prva slika je akcelerator iznutra, kad poređamo sve komponente.<br>
+            <img src="img/Ukupo.drawio.png" width="90%" height="120%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <br>
+            Ove dve slike predstavljaju BRAM i našu novu komponentu axi_registers. <br>
+            <img src="img/axi_registers.drawio (1).png" width="40%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <img src="img/BRAM.drawio.png" width="40%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI">
+            <br>
+            Nova komponenta axi_registers treba da vodi računa o upisu i ispisu u interne registre, kako bi mogli da enkapsuliramo
+            i zaboravimo na registre skroz. Preko registra <b>cfg_en</b> kontrolišemo ispis. Ostali registri su već uveliko poznati piscu i 
+            čitaocima nadam se. Komponenta je napravljena prema axi_lite templejtu sa vezbi. Axi_lite mašina stanja je takodje realizovana u okviru ove komponente.
+            Takođe, kako bi ulepšali pisanje odnosno učinili naš kood preglednijim koristili smo se package modulom axi_registers_pkg koji smo mi napravili.<br>
+            Sa ovime nam ostaje da realizujemo još najmanje jednu, a najviše 2 komponente. Dole ću priložiti kodove:<br><br>
+
+            <a href="text/BRAM_new.txt" target = "_blank"> novi BRAM</a><br>
+            <a href="text/BRAM_tb.vhd" target = "_blank"> BRAM tb, fali enable</a><br><br>
+            <a href="text/axi_register_pkg.txt" target = "_blank"> axi_register_pkg</a><br>
+            <a href="text/axi_registers.txt" target = "_blank"> axi_registers</a><br>
+            <a href="text/axi_registers_tb.txt" target = "_blank"> axi_registers_tb</a><br>
+
+        </p>
     </div>
+
+
+
     <div style="text-align: left;" id="reklame"> Kutak za muziku
         <br>
         <br>
