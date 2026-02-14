@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 09/01/2025 12:02:35 AM
+-- Create Date: 23/02/2026 12:02:35 AM
 -- Design Name: 
--- Module Name: axi_lite_cfg_registers - Behavioral
+-- Module Name: axi_registers - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
