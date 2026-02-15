@@ -111,6 +111,28 @@
             <a href="text/axi_registers_tb.txt" target = "_blank"> axi_registers_tb</a><br>
 
         </p>
+
+        <h2 style="text-align: left;"> 15. feb 2026. </h2>
+        <p class="project-text">
+
+            Realizovali smo komponentu, koju smo privremeno nazvali <b>img_resize</b> jer nam je inicjalna ideja bila da BRAM-ove punimo sa vrednostima potrebnim
+            za menjanje veličine slike. Komponenta je trebala da učitava vrednosti u zavisnosti od stanja signala <b>bord</b> i signala <b>radius</b> i na izlaz
+            izbacivala vrednosti za procesiranje. Kako je ta logika bila ili previše komplikovana ili nemoguća odlučili smo se za drugačiji pristup. Ova
+            komponenta služi da samo brine o tome šta ulazi u BRAM-ove i na izlaz daje naš pomerački prozor. Najveći problem je bio da je napravimo modularnom 
+            u zavisnosti od veličine našeg prozora. Testirali smo je samo na prozoru 3x3, ispravićemo greške u budućnosti ako ih bud bilo. 
+            <br>
+            Komponenta BRAM koju smo realizovali je imala svoje probleme tako da smo i nju ispravili. Kompletnu logiku promene veličine prozora i hendlovanja
+            ivičnih slučajeva implementiraćemo u našoj glavnoj komponenti. Videćemo kako funkcioniše taj pristup u narednim danima.
+            <br>
+            Dole ću priložiti sve komponente koje smo izmenjali: <br>
+            <a href="vhdl1/BRAM.vhd" target = "_blank"> ispravljeni BRAM</a><br>
+            <a href="vhdl1/BRAM_tb.vhd" target = "_blank"> ispravljeni BRAM_tb</a><br>
+            <a href="vhdl1/img_resize.vhd" target = "_blank"> img_resize</a><br>
+            <a href="vhdl1/img_resize_tb.vhd" target = "_blank"> img_resize_tb</a><br>
+            <a href="vhdl1/axi_registers.vhd" target = "_blank"> axi_registers</a><br>
+            <a href="vhdl1/axi_register_pkg.vhd" target = "_blank"> axi_registers_pkg</a><br>
+
+        </p>
     </div>
 
 
