@@ -133,6 +133,79 @@
             <a href="vhdl1/axi_register_pkg.vhd" target = "_blank"> axi_registers_pkg</a><br>
 
         </p>
+
+        <h2 style="text-align: left;"> 23. feb 2026. </h2>
+        <p class="project-text">
+
+            Dugo nisam updejtovao jer sam svakog dana mislio da ću završiti projekat i onda ću napisati post. Nažalost, projekat je zahtevniji
+            nego što sam očekivao. Nismo stigli da ga uradimo do roka jer smo imali problema u realizaciji našeg akceleratora i komponente
+            koja vodi računa o BRAM-ovima. Ostavićemo ispit za februarski rok(u martu), i adam se da ćemo ispraviti greške do tad. Trenutno
+            obojica nemamo snage ni vremena više da se bavimo sa ovim, tako da trebalo bi da napravimo pauzu od nekoliko dana, pre 
+            nego nastavimo sa izradom. <br>
+            
+            
+            Uspeli smo da realizujemo komponentu koja vodi računa o BRAM-ovima i o širini slike, pa time popunjava naše registre
+            w_k sa vrednostima koje odmah možemo da šaljemo na obradu. Uspeli smo da realizujemo sva proširenja, s time da 
+            proširenje sa najbližim vrednostima pravi veće ili manje greške u zavisnosi od radiusa. Logika iza svih
+            proširenja je da se u zavisnosi od radiusa, odredjeni broj ciklusa BRAM-ovi pune sa odredjenim vrednostima. Na taj
+            način odredjeni broj taktova više stagniramo, ali mi deluje ta logika mnogo zdravije i bolje za implementaciju
+            nego da pišemo previše if i case izjava. <br>
+            
+            Logika za proširenje sa konstantnim vrednostima, ili bez proširenja radi prelepo, problem nastaje kod proširenja
+            sa najbližimvrednostima. Nismo dizajnirali arhitekturu koja može da podržava punjenje BRAM-ova koji se ne koriste,
+            pa smo morali da realizujemo to svičovanjem internih registra window_k, koji vode računa o propagiranju
+            signala kroz registre. Taj proces svičovanja uglavnom ima problem sa tajminogm, tako da smo za <b> gornji levi</b> i
+            <b> donji levi</b> ugao imali greške. Drugačija logika je napravljena za gornju i donju stranicu. <br>
+            Donja stranica bi se punila tako što kratko vežemo BRAM1, odnosno prvi BRAM na ulazu piksela, a gornju stanicu
+            smo popunili tako što smo duplo(ili više) vezali neki od narednih izlaza BRAM(ova).
+            Ispod ću navesti sliku koja pokazuje celu axi_image_block komponentu. <br>
+
+            <img src="img/axi_image_block.drawio.png" width="90%" height="120%" align ="middle" hspace ="4" vspace ="4" alt="axi_image_block"> <br><br>
+
+            Za kraj, imali smo problem u povezivanju svih komponenti. Nismo znali kako da napravimo testbench za tu komponentu, niti je znao AI tako
+            da smo morali na slepo da radimo. Problem je nastao sa mode = '1' odnosno sa iylayom u Q9.7 formatu. Pokusali smo da realizujemo to
+            ali nam alat javlja greske konstantno. Razlicitih priroda. Na kraju smo samo odustali. Videcemo kako ce da ide kroz koju nedelju. 
+            Zasad cu ostaviti slike i kodove koje imamo zasad. Trebala bi nam pomoć neka, čisto kako bi znali kako da nastavimo dalje.
+            <br>
+            <img src="img/Ukupno2.drawio.png" width="90%" height=" 120%" align ="middle" hspace ="4" vspace ="4" alt="PAKI"> <br>
+            <br>
+            Ovo su greške koje smo dobijali na kraju, pretpostavljam da je problem kako sam realizovao q9.7, dobijao sam greške prvo
+            da je previše DSP blokova iskorišćeno, pa sam tražio utehu u chatgpt-ju jer nisam znao šta mogu da uradim povodom toga,
+            a nisam imao živaca da smišljam više, jer sam hteo da završimo do januarskog roka. Nažalost ipak ću morati da mozgam još o ovome.
+            <br>
+            <img src="img/timingIssue2.png" width="50%" height=" 50%" align ="middle" hspace ="4" vspace ="4" alt="PAKI"> <br>
+            <br>
+            
+            <img src="img/timingSummary2.png" width="90%" height=" 100%" align ="middle" hspace ="4" vspace ="4" alt="PAKI"> <br>
+            <br>
+            
+            Dodali smo i constrain file, kako bi možda rešili neke probleme. Kako prošle godine nismo stigli do tog dela u predmetu VLSI, što se projekta tiče,
+            samo sam prekopirao uputstvo koje sam dobio od grešaka i sa interneta: <br>
+            <img src="img/constrain.png" width="80%" height=" 80%"  align ="middle" hspace ="4" vspace ="4" alt="PAKI"> <br>
+            I na kraju evo ispod realizacija izlaza. Oreginalni izlaz koji sam ja napravio je bio potpuno drugačiji, ali usled grešaka
+            koje sam dobijao sam ga stalno menjao i nadogradjivao kako bi možda nešto proradilo. Promeniću ga skroz kada ga budem realiyovao ponovo.
+            <br>
+
+            <img src="img/Untitled.png" width="80%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI"> <br>
+            mac_acc posle dodajemo na pixel_new_8 i pixel_new_16 samo na drugačiji način. <br><br>
+            <img src="img/Untitled2.png" width="80%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI"> <br>
+            <img src="img/Untitled3.png" width="50%" height="30%" align ="middle" hspace ="4" vspace ="4" alt="PAKI"> <br>
+
+
+            Evo kodovi koje smo odradili, sve u sustini zajedno sa testbencevima:<br>
+            <a href="danFINAL/acc_image_filter.vhd" target = "_blank"> acc_image_filter</a>
+            <a href="danFINAL/acc_image_filter_tb.vhd" target = "_blank"> acc_image_filter_tb</a><br>
+            <a href="danFINAL/axi_registers.vhd" target = "_blank"> axi_registers</a><br>
+            <a href="danFINAL/axi_registers_tb.vhd" target = "_blank"> axi_registers_tb</a><br>
+            <a href="danFINAL/axi_image_block.vhd" target = "_blank"> axi_image_block</a><br>
+            <a href="danFINAL/axi_image_block_tb.vhd" target = "_blank"> axi_image_block_tb</a><br>
+            <a href="danFINAL/BRAM.vhd" target = "_blank"> BRAM</a><br>
+            <a href="danFINAL/BRAM_tb.vhd" target = "_blank"> BRAM_tb</a><br>
+            <a href="danFINAL/main.c" target = "_blank"> main.c</a><br>
+
+            
+        
+        </p>
     </div>
 
 
